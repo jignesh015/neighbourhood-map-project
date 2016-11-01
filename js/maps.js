@@ -4,89 +4,143 @@ var map;
 var markers = [];
 
 function initMap() {
-        // Create a styles array to use with the map.
-        var styles = [
-          {
-            featureType: 'water',
-            stylers: [
-              { color: '#19a0d8' }
-            ]
-          },{
-            featureType: 'administrative',
-            elementType: 'labels.text.stroke',
-            stylers: [
-              { color: '#ffffff' },
-              { weight: 6 }
-            ]
-          },{
-            featureType: 'administrative',
-            elementType: 'labels.text.fill',
-            stylers: [
-              { color: '#e85113' }
-            ]
-          },{
-            featureType: 'road.highway',
-            elementType: 'geometry.stroke',
-            stylers: [
-              { color: '#efe9e4' },
-              { lightness: -40 }
-            ]
-          },{
-            featureType: 'transit.station',
-            stylers: [
-              { weight: 9 },
-              { hue: '#e85113' }
-            ]
-          },{
-            featureType: 'road.highway',
-            elementType: 'labels.icon',
-            stylers: [
-              { visibility: 'off' }
-            ]
-          },{
-            featureType: 'water',
-            elementType: 'labels.text.stroke',
-            stylers: [
-              { lightness: 100 }
-            ]
-          },{
-            featureType: 'water',
-            elementType: 'labels.text.fill',
-            stylers: [
-              { lightness: -100 }
-            ]
-          },{
-            featureType: 'poi',
-            elementType: 'geometry',
-            stylers: [
-              { visibility: 'on' },
-              { color: '#f0e4d3' }
-            ]
-          },{
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {
+            lat: 19.0760,
+            lng: 72.8777
+        },
+        zoom: 11,
+        styles: [{
+            featureType: 'poi.park',
+            elementType: 'geometry.fill',
+            stylers: [{
+                color: '#a5b076'
+            }]
+        }, {
             featureType: 'road.highway',
             elementType: 'geometry.fill',
-            stylers: [
-              { color: '#efe9e4' },
-              { lightness: -25 }
-            ]
-          }
-        ];
+            stylers: [{
+                color: '#aa1111'
+            }]
+        }, {
+            featureType: 'road.arterial',
+            elementType: 'geometry.fill',
+            stylers: [{
+                color: '#D4AC0D'
+            }]
+        }, {
+            featureType: 'water',
+            elementType: 'geometry.fill',
+            stylers: [{
+                color: '#2471A3'
+            }]
+        }]
+    });
 
-        // Constructor creates a new map - only center and zoom are required.
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 40.7413549, lng: -73.9980244},
-          zoom: 13,
-          styles: styles,
-          mapTypeControl: false
+    var locations = [{
+        title: 'Gateway of India',
+        location: {
+            lat: 18.921984,
+            lng: 72.834654
+        }
+    }, {
+        title: 'Bandra Worli Sealink',
+        location: {
+            lat: 19.028522,
+            lng: 72.815312
+        }
+    }, {
+        title: 'Juhu Beach',
+        location: {
+            lat: 19.119464,
+            lng: 72.820160
+        }
+    }, {
+        title: 'Sanjay Gandhi National Park',
+        location: {
+            lat: 19.231567,
+            lng: 72.864186
+        }
+    }, {
+        title: 'Byculla Zoo',
+        location: {
+            lat: 19.075984,
+            lng: 72.877656
+        }
+    }, {
+        title: 'Marine Drive',
+        location: {
+            lat: 18.941482,
+            lng: 72.823679
+        }
+    }];
+    // Create a single latLng literal object.
+    var largeInfowindow = new google.maps.InfoWindow();
+
+    // var singleLatLng = {lat: 41.40363, lng: 2.174356};
+    for (var i = 0; i < locations.length; i++) {
+        // Get the position from the location array.
+        var position = locations[i].location;
+        console.log(position);
+        var title = locations[i].title;
+        // Create a marker per location, and put into markers array.
+        var marker = new google.maps.Marker({
+            position: position,
+            map:map,
+            title: title,
+            animation: google.maps.Animation.DROP,
+            id: i
         });
+        // Push the marker to our array of markers.
+        markers.push(marker);
 
-        // These are the real estate listings that will be shown to the user.
-        // Normally we'd have these in a database instead.
-        var locations = [
-          {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
-          {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
-          {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}},
-          {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}},
-          {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
-          {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
-        ];
+        // Create an onclick event to open the large infowindow at each marker.
+        marker.addListener('click', function() {
+            populateInfoWindow(this, largeInfowindow);
+        });
+    }
+
+    function populateInfoWindow(marker, infowindow) {
+        // Check to make sure the infowindow is not already opened on this marker.
+        console.log(infowindow);
+        if (infowindow.marker != marker) {
+            // Clear the infowindow content to give the streetview time to load.
+            infowindow.setContent('');
+            infowindow.marker = marker;
+            // Make sure the marker property is cleared if the infowindow is closed.
+            infowindow.addListener('closeclick', function() {
+                infowindow.marker = null;
+            });
+            var streetViewService = new google.maps.StreetViewService();
+            var radius = 50;
+            // In case the status is OK, which means the pano was found, compute the
+            // position of the streetview image, then calculate the heading, then get a
+            // panorama from that and set the options
+            function getStreetView(data, status) {
+                if (status == google.maps.StreetViewStatus.OK) {
+                    var nearStreetViewLocation = data.location.latLng;
+                    var heading = google.maps.geometry.spherical.computeHeading(
+                        nearStreetViewLocation, marker.position);
+                    infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+                    var panoramaOptions = {
+                        position: nearStreetViewLocation,
+                        pov: {
+                            heading: heading,
+                            pitch: 30
+                        }
+                    };
+                    var panorama = new google.maps.StreetViewPanorama(
+                        document.getElementById('pano'), panoramaOptions);
+                } else {
+                    infowindow.setContent('<div>' + marker.title + '</div>' +
+                        '<div>No Street View Found</div>');
+                }
+            }
+            // Use streetview service to get the closest streetview image within
+            // 50 meters of the markers position
+            streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+            // Open the infowindow on the correct marker.
+            infowindow.open(map, marker);
+        }
+    }
+}
