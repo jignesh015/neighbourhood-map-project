@@ -62,7 +62,7 @@ function initMap() {
             lng: 72.864186
         }
     }, {
-        title: 'Byculla Zoo',
+        title: 'Jijamata Udyaan',
         location: {
             lat: 19.075984,
             lng: 72.877656
@@ -81,7 +81,6 @@ function initMap() {
     for (var i = 0; i < locations.length; i++) {
         // Get the position from the location array.
         var position = locations[i].location;
-        console.log(position);
         var title = locations[i].title;
         // Create a marker per location, and put into markers array.
         var marker = new google.maps.Marker({
@@ -97,12 +96,31 @@ function initMap() {
         // Create an onclick event to open the large infowindow at each marker.
         marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
+            bounceMarker(this);
         });
+    }
+
+    var idList = [];
+    var count = $('#place-list').children().length;
+    for(var i = 0; i < count; i++) {
+        idList.push(i);
+    }
+
+    clickList();
+
+    function clickList() {
+        $('#place-list').children().click(function() {
+            var placeId = $(this).attr('id');
+            console.log(placeId);
+            var markerId = placeId.slice(-1);
+            var newMarker = markers[markerId];
+            bounceMarker(newMarker);
+            populateInfoWindow(newMarker, largeInfowindow);         
+        })
     }
 
     function populateInfoWindow(marker, infowindow) {
         // Check to make sure the infowindow is not already opened on this marker.
-        console.log(infowindow);
         if (infowindow.marker != marker) {
             // Clear the infowindow content to give the streetview time to load.
             infowindow.setContent('');
@@ -141,6 +159,18 @@ function initMap() {
             streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
             // Open the infowindow on the correct marker.
             infowindow.open(map, marker);
+        }
+    }
+
+    function bounceMarker(marker) {
+        console.log(marker.id);
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        stopAnimation(marker);
+
+        function stopAnimation(marker) {
+            setTimeout(function () {
+                marker.setAnimation(null);
+            }, 2000);
         }
     }
 }

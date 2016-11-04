@@ -31,21 +31,26 @@ html,body {
   #map {
     bottom:0px;
     height: 100%;
-    left: 362px;
+    padding-left: 10%;
     position: absolute;
     right: 0px;
+    width: 70%
   }
 
   .list-box {
     background: #fff;
     border: 1px solid #999;
-    border-radius: 3px;
+    /*border-radius: 3px;*/
     height: 100%;
     line-height: 35px;
-    padding: 10px 10px 30px 10px;
+    /*padding: 10px 10px 30px 10px;*/
     text-align: left;
-    width: 340px;
+    width: 20%;
   }
+
+#search-box {
+  margin-left: 5%;
+}
 
   /* Dropdown Button */
 .dropbtn {
@@ -71,7 +76,7 @@ html,body {
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
-    position: absolute;
+    position: relative;
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -82,7 +87,7 @@ html,body {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
-    display: block;
+    display: inline-block;
 }
 
 /* Change color of dropdown links on hover */
@@ -94,5 +99,46 @@ html,body {
 #pano {
   width: 200px;
   height: 200px;
+}
+
+.list-items {
+  background-color: #f9f9f9;
+  list-style: none;
+  width: 100%;
+  border-bottom: 2px solid #999;
+  cursor: pointer;
+  /*text-align: center;*/
+  position: relative;
+}
+
+.list-items:hover {
+  background-color: #999;
+}
+
+ul {
+  padding: 0 0 0 0;
+  margin: 0 5px 0 5px;
+}
+
+#details {
+  font-size: 12px;
+  background-color: #999;
+  width: 95%;
+  /*line-height: 5px;*/
+  box-shadow: 16px 8px 16px 0px rgba(0,0,0,0.5);
+  padding: 0 5px 0 5px;
+}
+
+@media screen and (max-width: 800px) {
+  .list-box {
+    display: none;
+  }
+
+  #map {
+    width: 100%;
+    padding: 0 0 0 0;
+    margin-top: 5px;
+  }
+  
 }
 
