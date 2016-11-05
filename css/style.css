@@ -129,6 +129,15 @@ ul {
   padding: 0 5px 0 5px;
 }
 
+.info {
+  background-color: white;
+  width: 99%;
+  line-height: 25px;
+  box-shadow: 0px 1px 16px 0px rgba(0,0,0,0.4);
+  font-size: 12px;
+  padding: 0 2px 0 2px;
+}
+
 @media screen and (max-width: 800px) {
   .list-box {
     display: none;

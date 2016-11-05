@@ -30,23 +30,29 @@ var placeInfo = [
 var Place = function(data) {
     this.placeName = ko.observable(data.name);
     this.wikiPlace = ko.observable(data.wikiName);
-    this.details = ko.observable("hello");
     this.placeId = ko.observable(data.id);
-}
+    this.divId = ko.computed(function(){
+        var div = 'div' + this.placeId();
+        return div;
+    }, this);
 
-var Detail = function(name) {
-    var details;
-    var wiki = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + name + '&prop=revisions&rvprop=content&format=json';
-    $.ajax({
-        url: wiki,
-        dataType: 'jsonp',
-    }).done(function (response) {
-        var wikiArticles = response[2];
-        details = wikiArticles[0];
-        this.details = ko.observable('details');
-        $('#wiki').remove();
-        $('#details').append('<span id="wiki"> <h3>' + name + '</h3>' + details + '</span>');
-    })
+    this.details = ko.observableArray([]);
+
+    this.wiki = ko.computed(function() {
+        var self = this;
+        var name = this.wikiPlace();
+        var wiki = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + name + '&prop=revisions&rvprop=content&format=json';
+        $.ajax({
+            url: wiki,
+            dataType: 'jsonp',
+        }).done(function (response) {
+            var wikiArticles = response[2];
+            wikiDetails = wikiArticles[0];
+            self.details.push(wikiDetails);
+        })
+    }, this);
+
+    this.wikiDesc = ko.observable('');
 }
 
 var WikiDetail = function(data) {
@@ -60,15 +66,18 @@ var myViewModel = function() {
     placeInfo.forEach(function(place) {
         self.placeList.push(new Place(place));
     });
-
+    var oldId;
     this.currentWiki = ko.observable(self.placeList()[0]);
     this.displayDetails = function(thisPlace) {
+        var test = thisPlace.divId();
+        var newId = '#' + test;
         self.currentWiki(thisPlace);
-        console.dir(thisPlace.wikiPlace());
-        var wikiName = thisPlace.wikiPlace();
-     
-        Detail(wikiName);
-    }
+        var id = '#' + thisPlace.placeId();
+        $(oldId).toggle();
+        $(newId).show();
+        this.wikiDesc(this.details()[0]);        
+        oldId = '#' + test;
+    };
 }
 
 ko.applyBindings(new myViewModel());

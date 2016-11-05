@@ -100,18 +100,11 @@ function initMap() {
         });
     }
 
-    var idList = [];
-    var count = $('#place-list').children().length;
-    for(var i = 0; i < count; i++) {
-        idList.push(i);
-    }
-
     clickList();
 
     function clickList() {
         $('#place-list').children().click(function() {
             var placeId = $(this).attr('id');
-            console.log(placeId);
             var markerId = placeId.slice(-1);
             var newMarker = markers[markerId];
             bounceMarker(newMarker);
@@ -163,7 +156,6 @@ function initMap() {
     }
 
     function bounceMarker(marker) {
-        console.log(marker.id);
         marker.setAnimation(google.maps.Animation.BOUNCE);
         stopAnimation(marker);
 

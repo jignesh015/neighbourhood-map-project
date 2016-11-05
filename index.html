@@ -24,10 +24,12 @@
                 <ul id="place-list" data-bind= 'foreach: placeList()'>
                     <li class="list-items" data-bind= 'text: placeName, attr: {id: placeId}, click: $parent.displayDetails'>
                     </li>
+                    <div class="info" data-bind= 'attr: {id: divId}'>
+                    <span id="wiki" data-bind= 'text: wikiDesc'></span></div>
                 </ul>
-                <div id="details">
-                    <span id="wiki" data-bind= 'text: displayDetails.details'></span>
-                </div>
+                <!-- <div id="details" data-bind= 'with: currentWiki'>
+                    <span id="wiki" data-bind= 'text: wikiDesc'></span>
+                </div> -->
             </div>
         </div>
         <div id="map"></div>
