@@ -10,6 +10,11 @@ html,body {
     position: relative;
   }
 
+  .menu {
+    display: none;
+    /*width: 3%;*/
+  }
+
   input {
     font-size: 12px;
   }
@@ -60,6 +65,7 @@ html,body {
     font-size: 16px;
     border: none;
     cursor: pointer;
+    width: 100%;
 }
 
 /* Dropdown button on hover & focus */
@@ -71,6 +77,8 @@ html,body {
 .dropdown {
     position: relative;
     display: inline-block;
+    width: 95%;
+    margin-left: 2%;
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -78,14 +86,14 @@ html,body {
     display: none;
     position: relative;
     background-color: #f9f9f9;
-    min-width: 160px;
+    min-width: 120px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
 /* Links inside the dropdown */
 .dropdown-content a {
     color: black;
-    padding: 12px 16px;
+    padding: 2% 8%;
     text-decoration: none;
     display: inline-block;
 }
@@ -124,7 +132,6 @@ ul {
   font-size: 12px;
   background-color: #999;
   width: 95%;
-  /*line-height: 5px;*/
   box-shadow: 16px 8px 16px 0px rgba(0,0,0,0.5);
   padding: 0 5px 0 5px;
 }
@@ -138,16 +145,98 @@ ul {
   padding: 0 2px 0 2px;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 770px) {
   .list-box {
     display: none;
+  }
+
+  .menu {
+    display: block;
+    width: 100%
+  }
+
+  .menu-icon {
+    width: 8%;
+    height: 8%;
   }
 
   #map {
     width: 100%;
     padding: 0 0 0 0;
-    margin-top: 5px;
+    height: 92%;
   }
-  
+
+  #listClass {
+    display: block;
+    width: 50%;
+  } 
+
+  body {
+    font-size: 30px;
+  }
+
+  .info {
+    font-size: 30px;
+  }
+
+  .dropdown-content {
+    width: 100%;
+    display: block;
+  }
+
+  .dropdown-content a {
+    padding: 1% 5%;
+  }
+
+}
+
+@media screen and (max-width: 450px) {
+  .menu-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  body {
+    font-size: 20px;
+  }
+
+  .info {
+    font-size: 18px;
+  }
+
+  .dropdown-content {
+    width: 100%;
+    display: block;
+  }
+
+  .dropdown-content a {
+    padding: 0 2% 0 2%;
+    font-size: 22px;
+  }  
+}
+
+@media screen and (max-width: 380px) {
+  .menu-icon {
+    width: 45px;
+    height: 45px;
+  } 
+
+  body {
+    font-size: 15px;
+  }
+
+  .info {
+    font-size: 13px;
+  }
+
+  .dropdown-content {
+    width: 100%;
+    display: block;
+  }
+
+  .dropdown-content a {
+    padding: 1% 5%;
+    font-size: 15px;
+  }   
 }
 
