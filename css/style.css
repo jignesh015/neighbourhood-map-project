@@ -175,6 +175,10 @@ ul {
     font-size: 30px;
   }
 
+  .list-box {
+    line-height: 50px;
+  }
+
   .info {
     font-size: 30px;
   }
@@ -198,6 +202,10 @@ ul {
 
   body {
     font-size: 20px;
+  }
+
+   .list-box {
+    line-height: 35px;
   }
 
   .info {
