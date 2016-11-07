@@ -8,31 +8,31 @@
 </head>
 <body>
     <div class="container">
-        <div class="list-box">
+        <div class="menu">
+            <img class="menu-icon" src="img/menu-icon.png" data-bind= 'click: showList'>
+        </div>
+        <div class="list-box" data-bind= 'attr: {id: listClass}'>
             <h1>Places of interest</h1>
-            <input id="search-box" type="text" placeholder="Place to visit">
             <div class="dropdown">
               <button onclick="myFunction()"" id="filter-button" class="dropbtn">Filter</button>
               <div id="filter-elements" class="dropdown-content">
-                  <a href="">test1</a>
-                  <a href="">test2</a>
-                  <a href="">test3</a>
+                  <a id="paid" data-bind= 'click: filterListPaid'>Paid</a>
+                  <a id="unpaid" data-bind= 'click: filterListUnPaid'>Unpaid</a>
+                  <a id="all" data-bind= 'click: filterListAll'>All</a>
               </div>
             </div>
             <hr>
+            <div data-bind= 'text: filterIndicator, visible: filterInfo'> </div>
             <div id="list">
                 <ul id="place-list" data-bind= 'foreach: placeList()'>
-                    <li class="list-items" data-bind= 'text: placeName, attr: {id: placeId}, click: $parent.displayDetails'>
+                    <li class="list-items" data-bind= 'text: placeName, visible: listVisible, attr: {id: placeId}, click: $parent.displayDetails'>
                     </li>
-                    <div class="info" data-bind= 'attr: {id: divId}'>
-                    <span id="wiki" data-bind= 'text: wikiDesc'></span></div>
+                    <div class="info" data-bind= 'visible: wikiVisible, attr: {id: divId}'>
+                    <span id="wiki" data-bind= 'text: wikiDesc'></span><p data-bind= 'visible: sourceWiki'>(Source: Wikipedia)</p></div>
                 </ul>
-                <!-- <div id="details" data-bind= 'with: currentWiki'>
-                    <span id="wiki" data-bind= 'text: wikiDesc'></span>
-                </div> -->
             </div>
         </div>
-        <div id="map"></div>
+        <div id="map" data-bind= "style: { width: mapWidth}"></div>
     </div>
     <script src="js/lib/jquery.min.js"></script>
     <script src="js/lib/knockout-3.2.0.js"></script>

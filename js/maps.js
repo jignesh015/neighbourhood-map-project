@@ -2,7 +2,6 @@ var map;
 
 // Create a new blank array for all the listing markers.
 var markers = [];
-
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
@@ -37,51 +36,28 @@ function initMap() {
         }]
     });
 
-    var locations = [{
-        title: 'Gateway of India',
-        location: {
-            lat: 18.921984,
-            lng: 72.834654
+    var num = placeInfo.length;
+    var locArray = [];
+    for(var i = 0; i < num; i++) {
+        var placeTitle = placeInfo[i].name;
+        var obj = {
+            title: placeInfo[i].name,
+            location: {
+                lat: placeInfo[i].lat,
+                lng: placeInfo[i].lng
+            }
         }
-    }, {
-        title: 'Bandra Worli Sealink',
-        location: {
-            lat: 19.028522,
-            lng: 72.815312
-        }
-    }, {
-        title: 'Juhu Beach',
-        location: {
-            lat: 19.119464,
-            lng: 72.820160
-        }
-    }, {
-        title: 'Sanjay Gandhi National Park',
-        location: {
-            lat: 19.231567,
-            lng: 72.864186
-        }
-    }, {
-        title: 'Jijamata Udyaan',
-        location: {
-            lat: 19.075984,
-            lng: 72.877656
-        }
-    }, {
-        title: 'Marine Drive',
-        location: {
-            lat: 18.941482,
-            lng: 72.823679
-        }
-    }];
+        locArray.push(obj);
+    }
+
     // Create a single latLng literal object.
     var largeInfowindow = new google.maps.InfoWindow();
 
-    // var singleLatLng = {lat: 41.40363, lng: 2.174356};
-    for (var i = 0; i < locations.length; i++) {
+    var locNum = locArray.length;
+    for (var i = 0; i < locNum; i++) {
         // Get the position from the location array.
-        var position = locations[i].location;
-        var title = locations[i].title;
+        var position = locArray[i].location;
+        var title = locArray[i].title;
         // Create a marker per location, and put into markers array.
         var marker = new google.maps.Marker({
             position: position,
@@ -90,6 +66,7 @@ function initMap() {
             animation: google.maps.Animation.DROP,
             id: i
         });
+
         // Push the marker to our array of markers.
         markers.push(marker);
 
@@ -99,6 +76,37 @@ function initMap() {
             bounceMarker(this);
         });
     }
+
+    $('#paid').click(function() {        
+        for(var i = 0; i < locNum; i++) {
+            if(placeInfo[i].filter === 1) {
+                markers[i].setMap(map);
+                bounceMarker(markers[i]);
+            }
+            else {
+                markers[i].setMap(null);
+            }
+        }
+    });
+
+    $('#unpaid').click(function() {
+         for(var i = 0; i < locNum; i++) {
+            if(placeInfo[i].filter === 0) {
+                markers[i].setMap(map);
+                bounceMarker(markers[i]);
+            }
+            else {
+                markers[i].setMap(null);
+            }
+        }
+    });
+
+    $('#all').click(function() {
+        for(var i = 0; i < locNum; i++) {
+            markers[i].setMap(map);
+            bounceMarker(markers[i]);
+        }
+    });
 
     clickList();
 
