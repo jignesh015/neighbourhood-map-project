@@ -1,3 +1,4 @@
+//Model for storing location info
 var placeInfo = [
     {
         name: 'Gateway of India',
@@ -54,12 +55,15 @@ var Place = function(data) {
     }, this);
     this.filter = ko.observable(data.filter);
 
+    //The details array will contain the short description of places obtained from Wikipedia
     this.details = ko.observableArray([]);
     this.sourceWiki = ko.observable(true);
     this.wiki = ko.computed(function() {
         var self = this;
         var name = this.wikiPlace();
         var wiki = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + name + '&prop=revisions&rvprop=content&format=json';
+        
+        //Error Handling for Wikipedia API
         var wikiTimeout = setTimeout(function() {
             self.details.push("Oops! Failed to connect to Wikipedia");
             var alerted = localStorage.getItem('alerted') || '';
@@ -67,8 +71,8 @@ var Place = function(data) {
                 alert("Unable to connect to Wikipedia");
                 localStorage.setItem('alerted','yes');
             }
-            self.sourceWiki(false);
-        }, 4000)
+            self.sourceWiki(false);  
+        }, 8000)
         $.ajax({
             url: wiki,
             dataType: 'jsonp',
@@ -87,18 +91,34 @@ var Place = function(data) {
 
 var myViewModel = function() {
     var self = this;
+    //Clearing localstorage when the page loads
     localStorage.removeItem('alerted');
     this.placeList = ko.observableArray([]);
-    this.filterIndicator = ko.observable('');
-    this.filterInfo = ko.observable(false);
     placeInfo.forEach(function(place) {
         self.placeList.push(new Place(place));
     });
+    this.filterIndicator = ko.observable('');
+    this.filterInfo = ko.observable(false);
+    this.displayFilter = ko.observable('dropdown-content');
+
+    //Shows Drop Down menu on clicking Filter Button
+    var flag;
+    this.showDropDown = function() {
+        if(flag !== 0) {
+            self.displayFilter('dropdown-content' + ' ' + 'show');
+            flag = 0;
+        }
+        else {
+            self.displayFilter('dropdown-content');
+            flag = 1;
+        }
+    }
+
+    //showList function toggles with list and map width on smaller displays
     var temp;
     this.listClass = ko.observable('');
     this.mapWidth = ko.observable('');
     this.showList = function() {
-        console.dir("click");
         if(temp !== 0) {
            self.listClass('listClass');
            self.mapWidth('50%');
@@ -111,6 +131,7 @@ var myViewModel = function() {
         }
     }
 
+    //This function filters Paid places. Filter is 1 for paid places.
     this.filterListPaid = function() {
         var len = self.placeList().length;
         self.filterIndicator('Paid Places:');
@@ -126,6 +147,7 @@ var myViewModel = function() {
         }
     };
 
+    //This function filters Unpaid places. Filter is 0 for unpaid places.
     this.filterListUnPaid = function() {
         var len = self.placeList().length;
         self.filterIndicator('Unpaid Places:');
@@ -141,6 +163,7 @@ var myViewModel = function() {
         }
     };
 
+    //This function displays all places.
     this.filterListAll = function() {
         var len = self.placeList().length;
         self.filterIndicator('All places:');
@@ -151,7 +174,7 @@ var myViewModel = function() {
         }
     };
 
-    this.currentWiki = ko.observable(self.placeList()[0]);
+    //This function displays description of places obtained from Wikipedia
     this.displayDetails = function(thisPlace) {
         this.wikiDesc(this.details()[0]);
         self.placeList().forEach(function(list) {

@@ -2,6 +2,13 @@ var map;
 
 // Create a new blank array for all the listing markers.
 var markers = [];
+
+//Error handling for Google Maps API
+var mapTimeout = setTimeout(function() {
+    alert("Unable to connect to Google maps");
+    $('#map').append('<h1>Sorry! Map not available</h1>')
+}, 5000);
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {
@@ -36,6 +43,9 @@ function initMap() {
         }]
     });
 
+    clearTimeout(mapTimeout);
+
+    //Take title and lat-lng from model and store it in locArray
     var num = placeInfo.length;
     var locArray = [];
     for(var i = 0; i < num; i++) {
@@ -50,12 +60,11 @@ function initMap() {
         locArray.push(obj);
     }
 
-    // Create a single latLng literal object.
     var largeInfowindow = new google.maps.InfoWindow();
 
     var locNum = locArray.length;
     for (var i = 0; i < locNum; i++) {
-        // Get the position from the location array.
+        // Get the position and title from the locArray.
         var position = locArray[i].location;
         var title = locArray[i].title;
         // Create a marker per location, and put into markers array.
@@ -77,6 +86,7 @@ function initMap() {
         });
     }
 
+    //Filter markers for paid places
     $('#paid').click(function() {        
         for(var i = 0; i < locNum; i++) {
             if(placeInfo[i].filter === 1) {
@@ -89,8 +99,9 @@ function initMap() {
         }
     });
 
+    //Filter markers for unpaid places
     $('#unpaid').click(function() {
-         for(var i = 0; i < locNum; i++) {
+        for(var i = 0; i < locNum; i++) {
             if(placeInfo[i].filter === 0) {
                 markers[i].setMap(map);
                 bounceMarker(markers[i]);
@@ -101,6 +112,7 @@ function initMap() {
         }
     });
 
+    //Filter markers for all places
     $('#all').click(function() {
         for(var i = 0; i < locNum; i++) {
             markers[i].setMap(map);
@@ -110,6 +122,7 @@ function initMap() {
 
     clickList();
 
+    //Animate marker when respective list item is clicked
     function clickList() {
         $('#place-list').children().click(function() {
             var placeId = $(this).attr('id');
@@ -131,7 +144,7 @@ function initMap() {
                 infowindow.marker = null;
             });
             var streetViewService = new google.maps.StreetViewService();
-            var radius = 50;
+            var radius = 100;
             // In case the status is OK, which means the pano was found, compute the
             // position of the streetview image, then calculate the heading, then get a
             // panorama from that and set the options
@@ -144,7 +157,7 @@ function initMap() {
                     var panoramaOptions = {
                         position: nearStreetViewLocation,
                         pov: {
-                            heading: heading,
+                            heading: heading - 60,
                             pitch: 30
                         }
                     };
@@ -152,17 +165,18 @@ function initMap() {
                         document.getElementById('pano'), panoramaOptions);
                 } else {
                     infowindow.setContent('<div>' + marker.title + '</div>' +
-                        '<div>No Street View Found</div>');
+                        '<div>(No Street View Found)</div>');
                 }
             }
             // Use streetview service to get the closest streetview image within
-            // 50 meters of the markers position
+            // 100 meters of the markers position
             streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
             // Open the infowindow on the correct marker.
             infowindow.open(map, marker);
         }
     }
 
+    //Add bounce animation to markers
     function bounceMarker(marker) {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         stopAnimation(marker);

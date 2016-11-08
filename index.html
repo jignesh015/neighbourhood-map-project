@@ -14,8 +14,8 @@
         <div class="list-box" data-bind= 'attr: {id: listClass}'>
             <h1>Places of interest</h1>
             <div class="dropdown">
-              <button onclick="myFunction()"" id="filter-button" class="dropbtn">Filter</button>
-              <div id="filter-elements" class="dropdown-content">
+              <button id="filter-button" class="dropbtn" data-bind= 'click: showDropDown'>Filter</button>
+              <div id="filter-elements" class="dropdown-content" data-bind= 'attr: {class: displayFilter}'>
                   <a id="paid" data-bind= 'click: filterListPaid'>Paid</a>
                   <a id="unpaid" data-bind= 'click: filterListUnPaid'>Unpaid</a>
                   <a id="all" data-bind= 'click: filterListAll'>All</a>
@@ -38,11 +38,6 @@
     <script src="js/lib/knockout-3.2.0.js"></script>
     <script src="js/app.js"></script>
     <script src="js/maps.js"></script>
-    <script type="text/javascript">
-        function myFunction() {
-            document.getElementById("filter-elements").classList.toggle("show");
-        }
-    </script>
 
     <script async defer
         src=

@@ -53,10 +53,6 @@ html,body {
     width: 20%;
   }
 
-#search-box {
-  margin-left: 5%;
-}
-
   /* Dropdown Button */
 .dropbtn {
     background-color: #4CAF50;
@@ -86,7 +82,8 @@ html,body {
     display: none;
     position: relative;
     background-color: #f9f9f9;
-    min-width: 120px;
+    /*min-width: 120px;*/
+    max-width: 100%;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
 
@@ -172,7 +169,7 @@ ul {
   } 
 
   body {
-    font-size: 30px;
+    font-size: 25px;
   }
 
   .list-box {
@@ -180,12 +177,16 @@ ul {
   }
 
   .info {
-    font-size: 30px;
+    font-size: 22px;
+  }
+
+  .dropbtn {
+    font-size: 22px;
   }
 
   .dropdown-content {
     width: 100%;
-    display: block;
+    text-align: center;
   }
 
   .dropdown-content a {
@@ -209,17 +210,20 @@ ul {
   }
 
   .info {
-    font-size: 18px;
+    font-size: 16px;
+  }
+
+  .dropbtn {
+    font-size: 16px;
   }
 
   .dropdown-content {
     width: 100%;
-    display: block;
   }
 
   .dropdown-content a {
     padding: 0 2% 0 2%;
-    font-size: 22px;
+    font-size: 20px;
   }  
 }
 
@@ -239,7 +243,7 @@ ul {
 
   .dropdown-content {
     width: 100%;
-    display: block;
+    /*display: block;*/
   }
 
   .dropdown-content a {
