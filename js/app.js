@@ -49,7 +49,7 @@ var placeInfo = [
         filter: 0,
         srNum: 5
     }
-]
+];
 
 var Place = function(data) {
     this.placeName = ko.observable(data.name);
@@ -81,7 +81,7 @@ var Place = function(data) {
                 localStorage.setItem('alerted','yes');
             }
             self.sourceWiki(false);  
-        }, 8000)
+        }, 8000);
         $.ajax({
             url: wiki,
             dataType: 'jsonp',
@@ -90,13 +90,13 @@ var Place = function(data) {
             wikiDetails = wikiArticles[0];
             self.details.push(wikiDetails);
             clearTimeout(wikiTimeout);
-        })
+        });
     }, this);
 
     this.wikiDesc = ko.observable('');
     this.listVisible = ko.observable(true);
     this.wikiVisible = ko.observable(false);
-}
+};
 
 var myViewModel = function() {
     var self = this;
@@ -121,7 +121,7 @@ var myViewModel = function() {
             self.displayFilter('dropdown-content');
             flag = 1;
         }
-    }
+    };
 
     //showList function toggles with list and map width on smaller displays
     var temp;
@@ -138,7 +138,7 @@ var myViewModel = function() {
             self.mapWidth('100%');
             temp = 1;
         }
-    }
+    };
 
     //This function filters Paid places. Filter is 1 for paid places.
     this.filterListPaid = function() {
@@ -207,6 +207,6 @@ var myViewModel = function() {
         });
         thisPlace.wikiVisible(!thisPlace.wikiVisible());
     };
-}
+};
 
 ko.applyBindings(new myViewModel());

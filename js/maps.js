@@ -6,7 +6,7 @@ var markers = [];
 //Error handling for Google Maps API
 var mapTimeout = setTimeout(function() {
     alert("Unable to connect to Google maps");
-    $('#map').append('<h1>Sorry! Map not available</h1>')
+    $('#map').append('<h1>Sorry! Map not available</h1>');
 }, 5000);
 
 function initMap() {
@@ -56,7 +56,7 @@ function initMap() {
                 lat: placeInfo[i].lat,
                 lng: placeInfo[i].lng
             }
-        }
+        };
         locArray.push(obj);
     }
 
@@ -98,7 +98,7 @@ function initMap() {
                 markers[i].setMap(null);
             }
         }
-    }
+    };
 
     //Filter markers for unpaid places
     unpaidPlaceMarker = function() {
@@ -111,7 +111,7 @@ function initMap() {
                 markers[i].setMap(null);
             }
         }
-    }
+    };
 
     //Filter markers for all places
     allPlaceMarker = function() {
@@ -119,14 +119,14 @@ function initMap() {
             markers[i].setMap(map);
             bounceMarker(markers[i]);
         }
-    }
+    };
 
     //Animate marker when respective list item is clicked
     clickList = function(markerId) {
             var newMarker = markers[markerId];
             bounceMarker(newMarker);
             populateInfoWindow(newMarker, largeInfowindow);
-    }
+    };
 
     function populateInfoWindow(marker, infowindow) {
         // Check to make sure the infowindow is not already opened on this marker.
