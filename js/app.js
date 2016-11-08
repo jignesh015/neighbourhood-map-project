@@ -6,42 +6,48 @@ var placeInfo = [
         id: 'place0',
         lat: 18.921984,
         lng: 72.834654,
-        filter: 0
+        filter: 0,
+        srNum: 0
     },{
         name: 'Bandra Worli Sealink',
         wikiName: 'Bandra',
         id: 'place1',
         lat: 19.028522,
         lng: 72.815312,
-        filter: 1
+        filter: 1,
+        srNum: 1
     },{
         name: 'Juhu Beach',
         wikiName: 'Juhu',
         id: 'place2',
         lat: 19.119464,
         lng: 72.820160,
-        filter: 0
+        filter: 0,
+        srNum: 2
     },{
         name: 'Sanjay Gandhi National Park',
         wikiName: 'Sanjay Gandhi National Park',
         id: 'place3',
         lat: 19.231567,
         lng: 72.864186,
-        filter: 1
+        filter: 1,
+        srNum: 3
     },{
         name: 'Jijamata Udyaan',
         wikiName: 'Jijamata Udyaan',
         id: 'place4',
         lat: 19.075984,
         lng: 72.877656,
-        filter: 1
+        filter: 1,
+        srNum: 4
     },{
         name: 'Marine Drive',
         wikiName: 'Marine Drive, Mumbai',
         id: 'place5',
         lat: 18.941482,
         lng: 72.823679,
-        filter: 0
+        filter: 0,
+        srNum: 5
     }
 ]
 
@@ -54,6 +60,7 @@ var Place = function(data) {
         return div;
     }, this);
     this.filter = ko.observable(data.filter);
+    this.srNum = ko.observable(data.srNum);
 
     //The details array will contain the short description of places obtained from Wikipedia
     this.details = ko.observableArray([]);
@@ -66,6 +73,8 @@ var Place = function(data) {
         //Error Handling for Wikipedia API
         var wikiTimeout = setTimeout(function() {
             self.details.push("Oops! Failed to connect to Wikipedia");
+            //localStorage is used because without it,
+            //the alert message will pop-up multiple times
             var alerted = localStorage.getItem('alerted') || '';
             if (alerted != 'yes') {
                 alert("Unable to connect to Wikipedia");
@@ -139,6 +148,7 @@ var myViewModel = function() {
         for(var i = 0; i < len; i++) {
             if(self.placeList()[i].filter() === 1) {
                 self.placeList()[i].listVisible(true);
+                paidPlaceMarker();
             }
             else {
                 self.placeList()[i].listVisible(false);
@@ -155,6 +165,7 @@ var myViewModel = function() {
         for(var i = 0; i < len; i++) {
             if(self.placeList()[i].filter() === 0) {
                 self.placeList()[i].listVisible(true);
+                unpaidPlaceMarker();
             }
             else {
                 self.placeList()[i].listVisible(false);
@@ -171,12 +182,26 @@ var myViewModel = function() {
         for(var i = 0; i < len; i++) {
             self.placeList()[i].listVisible(true);
             self.placeList()[i].wikiVisible(false);
+            allPlaceMarker();
         }
     };
 
     //This function displays description of places obtained from Wikipedia
     this.displayDetails = function(thisPlace) {
-        this.wikiDesc(this.details()[0]);
+        self.displayWikiDetails(this);
+        clickList(this.srNum());
+    };
+
+    markerDisplayDetails = function(thisId) {
+        self.placeList().forEach(function(place) {
+            if(thisId === place.srNum()) {
+                self.displayWikiDetails(place);
+            }
+        });
+    };
+
+    this.displayWikiDetails = function(thisPlace) {
+        thisPlace.wikiDesc(thisPlace.details()[0]);
         self.placeList().forEach(function(list) {
             list.wikiVisible(false);
         });

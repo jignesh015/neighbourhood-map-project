@@ -83,11 +83,12 @@ function initMap() {
         marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
             bounceMarker(this);
+            markerDisplayDetails(this.id);
         });
     }
 
     //Filter markers for paid places
-    $('#paid').click(function() {        
+    paidPlaceMarker = function() {
         for(var i = 0; i < locNum; i++) {
             if(placeInfo[i].filter === 1) {
                 markers[i].setMap(map);
@@ -97,10 +98,10 @@ function initMap() {
                 markers[i].setMap(null);
             }
         }
-    });
+    }
 
     //Filter markers for unpaid places
-    $('#unpaid').click(function() {
+    unpaidPlaceMarker = function() {
         for(var i = 0; i < locNum; i++) {
             if(placeInfo[i].filter === 0) {
                 markers[i].setMap(map);
@@ -110,27 +111,21 @@ function initMap() {
                 markers[i].setMap(null);
             }
         }
-    });
+    }
 
     //Filter markers for all places
-    $('#all').click(function() {
+    allPlaceMarker = function() {
         for(var i = 0; i < locNum; i++) {
             markers[i].setMap(map);
             bounceMarker(markers[i]);
         }
-    });
-
-    clickList();
+    }
 
     //Animate marker when respective list item is clicked
-    function clickList() {
-        $('#place-list').children().click(function() {
-            var placeId = $(this).attr('id');
-            var markerId = placeId.slice(-1);
+    clickList = function(markerId) {
             var newMarker = markers[markerId];
             bounceMarker(newMarker);
-            populateInfoWindow(newMarker, largeInfowindow);         
-        })
+            populateInfoWindow(newMarker, largeInfowindow);
     }
 
     function populateInfoWindow(marker, infowindow) {
@@ -184,7 +179,7 @@ function initMap() {
         function stopAnimation(marker) {
             setTimeout(function () {
                 marker.setAnimation(null);
-            }, 2000);
+            }, 2100);
         }
     }
 }
